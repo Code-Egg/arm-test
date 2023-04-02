@@ -11,4 +11,5 @@ jobs:
         if: success()
         run: |
           echo "${{ secrets.DOCKER_NAME }}"
+          echo "${{ vars.DOCKER_NAME1 }}"
           
