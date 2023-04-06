@@ -34,7 +34,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: eggcold/test:test1
+          tags: eggcold/test:test2
           platforms  : ${{ env.PLATFORM }}
 
           
