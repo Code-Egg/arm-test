@@ -31,11 +31,23 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
+      - name: Determine PHP Major/Minor Version
+        id: php-version
+        run: |
+          _0=$(echo ${{ env.PHP_VERSION }} | cut -d. -f1)
+          _1=$(echo ${{ env.PHP_VERSION }} | cut -d. -f2)
+          echo "_0=$_0" >> $GITHUB_OUTPUT
+          echo "_1=$_1" >> $GITHUB_OUTPUT
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
           push: true
+          context: template
+          build-args: |
+            OLS_VERSION=${{ env.OLS_VERSION }}
+            PHP_VERSION=${{ env.PHP_VERSION }}
+            PHP_MAJOR_VERSION=${{ steps.php-version.outputs._0 }}
+            PHP_MINOR_VERSION=${{ steps.php-version.outputs._1 }}          
           tags: eggcold/test:${{ env.OLS_VERSION }}-lsphp81
           #platforms  : ${{ env.PLATFORM }}
           platforms  : linux/amd64,linux/arm64/v8
