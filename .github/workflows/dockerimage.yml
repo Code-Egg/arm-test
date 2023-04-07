@@ -2,16 +2,18 @@ name: Dockermain
 on:
   push:
     branches: ['main']
+
+env:
+  OLS_VERSION: 1.7.16
+  PHP_VERSION: '8.2.3'
 jobs:
   docker:
     strategy:
       matrix:
         include:
-        - arch    : amd64
-          #mode    : build-and-test
+        #- arch    : amd64
         - arch    : arm64
           variant : v8
-          #mode    : build-only
     runs-on: ubuntu-latest
     env:
       PLATFORM  : linux/${{ matrix.arch }}${{ (matrix.variant != '' && format('/{0}', matrix.variant)) || '' }}
@@ -21,7 +23,6 @@ jobs:
       - name: Set up QEMU        
         uses: docker/setup-qemu-action@v2
         with:
-          #platforms: 'arm64,arm'
           platforms: ${{ matrix.arch }}
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -30,11 +31,12 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: eggcold/test:test2
+          tags: eggcold/test:openlitespeed:${{ env.OLS_VERSION }}-lsphp81
           #platforms  : ${{ env.PLATFORM }}
           platforms  : linux/amd64,linux/arm64/v8
 
