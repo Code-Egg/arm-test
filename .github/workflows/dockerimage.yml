@@ -36,7 +36,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: eggcold/test:openlitespeed:${{ env.OLS_VERSION }}-lsphp81
+          tags: eggcold/test:${{ env.OLS_VERSION }}-lsphp81
           #platforms  : ${{ env.PLATFORM }}
           platforms  : linux/amd64,linux/arm64/v8
 
